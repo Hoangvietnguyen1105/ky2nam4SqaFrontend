@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <h1>Create schedule of course group</h1>
+
+    <a href="/trangchu.html">Home</a>
+    <a href="/schedule.html">ComeBack</a>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Document</title>
+    <style>
+        /* CSS cho phần tử div */
+        div {
+          background-color: #f2f2f2;
+          padding: 10px;
+          margin-bottom: 10px;
+        }
+        
+        /* CSS cho phần tử label */
+        label {
+          font-weight: bold;
+          margin-right: 10px;
+        }
+        
+        /* CSS cho phần tử input */
+        input[type="text"] {
+          width: 100%;
+          padding: 5px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+        
+        /* CSS cho nút Update */
+        button[type="submit"] {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px;
+          border-radius: 5px;
+          border: none;
+          cursor: pointer;
+        }
+        
+        /* CSS cho thông báo lỗi */
+        .error-message {
+          color: red;
+          font-weight: bold;
+          margin-top: 10px;
+        }
+        a {
+            color: rgb(196, 33, 33); /* màu chữ */
+            text-decoration: none; /* không gạch chân */
+            font-weight: bold; /* đậm chữ */
+            margin-left: 20px;
+            }
+
+            a:hover {
+            color: red; /* thay đổi màu chữ khi di chuột qua */
+            text-decoration: underline; /* gạch chân khi di chuột qua */
+            cursor: pointer; /* hiển thị con trỏ tay */
+            }
+
+            a:active {
+            color: green; /* thay đổi màu chữ khi nhấn chuột */
+            }
+      </style>
+      <script>
+                var id = localStorage.getItem('CGID');
+
+            $(document).ready(function() {
+            $('#edit-form').submit(function(event) {
+                // Ngăn chặn form gửi đi mặc định
+                event.preventDefault();
+                                var weekInput = $('#week').val();
+                if (!isValidWeekInput(weekInput)) {
+                    alert("Please enter week numbers between 1 and 20, separated by commas (,)");
+                    return;
+                }
+                // Lấy các giá trị trong form
+                var day = $('#day').val();
+                var start = $('#start').val();
+                var lessonTime = $('#lessonTime').val();
+                var room = $('#room').val();
+                var week = $('#week').val().split(",").map(Number);
+                console.log(week)
+                // Gửi các giá trị đến API
+                $.ajax({
+                url: 'http://localhost:8081/create-schedule',
+                type: 'POST',
+                data: JSON.stringify({
+                    coursesGroupId:id,
+                    day: day,
+                    start: start,
+                    lessonTime: lessonTime,
+                    room: room,
+                    week: week
+                 }),
+                contentType: "application/json",
+
+                success: function(data) {
+                    // Xử lý dữ liệu trả về từ API
+                    console.log(data)
+                    alert(data);
+                    if(data==="Success"){
+                        window.location.href = "schedule.html";
+
+                       }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Xử lý lỗi
+                }
+                });
+            });
+            });
+            function isValidWeekInput(input) {
+            // kiểm tra định dạng
+            if (!/^\d+(,\d+)*$/.test(input)) {
+                return false;
+            }
+            // tách các số và kiểm tra giá trị của từng số
+            var weekNumbers = input.split(",").map(Number);
+            for (var i = 0; i < weekNumbers.length; i++) {
+                if (weekNumbers[i] < 1 || weekNumbers[i] > 20) {
+                return false;
+                }
+            }
+            return true;
+            }
+    </script>
+    
+</head>
+<body>
+    <body>
+        <form id="edit-form">
+            <div>
+              <label for="day">Day:</label>
+              <input type="text" id="day" name="day" required>
+            </div>
+            <div>
+              <label for="start">Start:</label>
+              <input type="text" id="start" name="start" required>
+            </div>
+            <div>
+              <label for="lessonTime">Lesson Time:</label>
+              <input type="text" id="lessonTime" name="lessonTime" required>
+            </div>
+            <div>
+              <label for="room">Room:</label>
+              <input type="text" id="room" name="room" required min="101" max="150">
+            </div>
+            <div>
+              <label for="week">Week:</label>
+              <input type="text" id="week" name="week" required>
+            </div>
+            <button type="submit">Update</button>
+          </form>
+          
+    </body>
+    
+</body>
+</html>

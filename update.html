@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update schedule</title>
+    <h1>Update schedule of course group</h1>
+    <a href="/trangchu.html">Home</a>
+    <a href="/schedule.html">ComeBack</a>
+    <style>
+        /* CSS cho phần tử div */
+        div {
+          background-color: #f2f2f2;
+          padding: 10px;
+          margin-bottom: 10px;
+        }
+        
+        /* CSS cho phần tử label */
+        label {
+          font-weight: bold;
+          margin-right: 10px;
+        }
+        
+        /* CSS cho phần tử input */
+        input[type="text"] {
+          width: 100%;
+          padding: 5px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+        
+        /* CSS cho nút Update */
+        button[type="submit"] {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px;
+          border-radius: 5px;
+          border: none;
+          cursor: pointer;
+        }
+        
+        /* CSS cho thông báo lỗi */
+        .error-message {
+          color: red;
+          font-weight: bold;
+          margin-top: 10px;
+        }
+        a {
+            color: rgb(196, 33, 33); /* màu chữ */
+            text-decoration: none; /* không gạch chân */
+            font-weight: bold; /* đậm chữ */
+            margin-left: 20px;
+            }
+
+            a:hover {
+            color: red; /* thay đổi màu chữ khi di chuột qua */
+            text-decoration: underline; /* gạch chân khi di chuột qua */
+            cursor: pointer; /* hiển thị con trỏ tay */
+            }
+
+            a:active {
+            color: green; /* thay đổi màu chữ khi nhấn chuột */
+            }
+            a {
+            color: rgb(196, 33, 33); /* màu chữ */
+            text-decoration: none; /* không gạch chân */
+            font-weight: bold; /* đậm chữ */
+            margin-left: 20px;
+            }
+
+            a:hover {
+            color: red; /* thay đổi màu chữ khi di chuột qua */
+            text-decoration: underline; /* gạch chân khi di chuột qua */
+            cursor: pointer; /* hiển thị con trỏ tay */
+            }
+
+            a:active {
+            color: green; /* thay đổi màu chữ khi nhấn chuột */
+            }
+                    a {
+            display: inline-block;
+            background-color: #e85959;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+            margin-right: 20px;
+            margin-bottom:20px;
+          }
+  
+  a:hover {
+    background-color: #ff8c66;
+  }
+      </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+       $(document).ready(function () {
+  $.ajax({
+    url: "http://localhost:8081/get-one",
+    type: "GET",
+    data: { id: localStorage.getItem('scheduleId') },
+    success: function(data) {
+      console.log(data)
+      $('#day').val(data.day);
+      $('#start').val(data.start);
+      $('#lessonTime').val(data.lessonTime);
+      $('#room').val(data.room);
+      $('#week').val(data.week.join(','));
+    },
+    error: function(xhr, status, error) {
+      console.log(error);
+    }
+  });
+
+  $('#edit-form').submit(function(event) {
+    event.preventDefault();
+
+  var weekInput = $('#week').val();
+  if (!isValidWeekInput(weekInput)) {
+    alert("Please enter week numbers between 1 and 20, separated by commas (,)");
+    return;
+  }
+    var week = $('#week').val().split(',').map(function (x) { return parseInt(x, 10); });
+
+    var updateData = {
+      "id": parseInt(localStorage.getItem('scheduleId')),
+        
+      "day": $('#day').val(),
+      "lessonTime": $('#lessonTime').val(),
+      "room": $('#room').val(),
+      "start": $('#start').val(),
+      "week": week
+    };
+
+    $.ajax({
+      url: "http://localhost:8081/update-schedule",
+      type: "PUT",
+      contentType: "application/json",
+      data: JSON.stringify(updateData),
+      success: function(data) {
+
+        alert(data);
+        if(data==="Success"){
+            window.location.href = "schedule.html";
+
+        }
+      },
+      error: function(xhr, status, error) {
+        console.log(error);
+      }
+    });
+  });
+});
+            function isValidWeekInput(input) {
+            // kiểm tra định dạng
+            if (!/^\d+(,\d+)*$/.test(input)) {
+                return false;
+            }
+            // tách các số và kiểm tra giá trị của từng số
+            var weekNumbers = input.split(",").map(Number);
+            for (var i = 0; i < weekNumbers.length; i++) {
+                if (weekNumbers[i] < 1 || weekNumbers[i] > 20) {
+                return false;
+                }
+            }
+            return true;
+            }
+        </script>
+</head>
+<body>
+    <form id="edit-form">
+        <div>
+          <label for="day">Day:</label>
+          <input type="text" id="day" name="day" required>
+        </div>
+        <div>
+          <label for="start">Start:</label>
+          <input type="text" id="start" name="start" required>
+        </div>
+        <div>
+          <label for="lessonTime">Lesson Time:</label>
+          <input type="text" id="lessonTime" name="lessonTime" required>
+        </div>
+        <div>
+          <label for="room">Room:</label>
+          <input type="text" id="room" name="room" required>
+        </div>
+        <div>
+          <label for="week">Week:</label>
+          <input type="text" id="week" name="week" required>
+        </div>
+        <button type="submit">Update</button>
+      </form>
+      
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <h1>Create cour group of course </h1>
+
+    <a href="/trangchu.html">Home</a>
+    <a href="/courseGroup.html">ComeBack</a>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Document</title>
+    <style>
+        /* CSS cho phần tử div */
+        div {
+          background-color: #f2f2f2;
+          padding: 10px;
+          margin-bottom: 10px;
+        }
+        
+        /* CSS cho phần tử label */
+        label {
+          font-weight: bold;
+          margin-right: 10px;
+        }
+        
+        /* CSS cho phần tử input */
+        input[type="text"] {
+          width: 100%;
+          padding: 5px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+        
+        /* CSS cho nút Update */
+        button[type="submit"] {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px;
+          border-radius: 5px;
+          border: none;
+          cursor: pointer;
+        }
+        
+        /* CSS cho thông báo lỗi */
+        .error-message {
+          color: red;
+          font-weight: bold;
+          margin-top: 10px;
+        }
+        a {
+            color: rgb(196, 33, 33); /* màu chữ */
+            text-decoration: none; /* không gạch chân */
+            font-weight: bold; /* đậm chữ */
+            margin-left: 20px;
+            }
+
+            a:hover {
+            color: red; /* thay đổi màu chữ khi di chuột qua */
+            text-decoration: underline; /* gạch chân khi di chuột qua */
+            cursor: pointer; /* hiển thị con trỏ tay */
+            }
+
+            a:active {
+            color: green; /* thay đổi màu chữ khi nhấn chuột */
+            }
+            a {
+            color: rgb(196, 33, 33); /* màu chữ */
+            text-decoration: none; /* không gạch chân */
+            font-weight: bold; /* đậm chữ */
+            margin-left: 20px;
+            }
+
+            a:hover {
+            color: red; /* thay đổi màu chữ khi di chuột qua */
+            text-decoration: underline; /* gạch chân khi di chuột qua */
+            cursor: pointer; /* hiển thị con trỏ tay */
+            }
+
+            a:active {
+            color: green; /* thay đổi màu chữ khi nhấn chuột */
+            }
+                    a {
+            display: inline-block;
+            background-color: #e85959;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+            margin-right: 20px;
+            margin-bottom: 20px;
+          }
+  
+  a:hover {
+    background-color: #ff8c66;
+  }
+      </style>
+      <script>
+                var id = localStorage.getItem('CGID');
+
+            $(document).ready(function() {
+            $('#edit-form').submit(function(event) {
+                // Ngăn chặn form gửi đi mặc định
+                event.preventDefault();
+                                var weekInput = $('#week').val();
+               
+                // Lấy các giá trị trong form
+                var groupCode = $('#groupCode').val()
+                var labCode = $('#labCode').val()
+               console.log(groupCode)
+                // Gửi các giá trị đến API
+                $.ajax({
+                url: 'http://localhost:8081/create-coursesGroup',
+                type: 'POST',
+                data: JSON.stringify({
+                    course_code:id,
+                    groupCode:groupCode,
+                    labCode:labCode
+                 }),
+                contentType: "application/json",
+
+                success: function(data) {
+                    // Xử lý dữ liệu trả về từ API
+                    alert(data)
+                        if(data === "Success"){
+                            window.location.href = "courseGroup.html";
+
+                        }
+
+                       
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Xử lý lỗi
+                }
+                });
+            });
+            });
+            
+    </script>
+    
+</head>
+<body>
+    <body>
+        <form id="edit-form">
+            <div>
+              <label for="day">Group code:</label>
+              <input type="text" id="groupCode" name="groupCode" required pattern="[1-9]|[1-9][0-9]"">
+            </div>
+            
+           
+            <button type="submit">Add</button>
+          </form>
+          
+    </body>
+    
+</body>
+</html>
