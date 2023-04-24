@@ -5,18 +5,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" type="text/css" href="./css/trangchu.css">
 
-  <header>
-    <div class="logo">
-      <h1>Timetable</h1>
-    </div>
-    <div class="menu">
-      <ul>
-        <li><a href="#">Timetable</a></li>
-        <li><a href="#">student</a></li>
-        <li><a href="#">teacher</a></li>
-      </ul>
-    </div>
-  </header>
 
   <script>
     $(document).ready(function() {
@@ -32,11 +20,13 @@
             var courseCode = course.coursesCode;
             console.log(courseCode)
             var courseName = course.name;
-
+            var CCH = course.creditHour
+            var CCLH = course.classHour
+            var id = course.id
             // Tạo một dòng (row) trong bảng với các cột tương ứng
             var row = $('<tr>');
             row.append($('<td>').text(courseCode));
-              var courseLink = $('<td>').html($('<a>').attr('href', 'courseGroup.html?courseCode=' + encodeURIComponent(courseCode)).text(courseName)
+              var courseLink = $('<td>').html($('<a class="add-btn">').attr('href', 'courseGroup.html?courseCode=' + encodeURIComponent(courseCode)).text(courseName)
             )
             courseLink.click(function(courseCode) {
             return function() {
@@ -46,10 +36,49 @@
 
             row.append(courseLink)
             var actionCell = $('<td>');
-            actionCell.append($('<a>').text('Update'));
-            actionCell.append($('<a>').text('Delete'));
+            var deleteBtn = $('<a class="add-btn delete-btn">').text('Delete');
+            deleteBtn.attr('data-course-id', course.id);
+            var updateBtn = $('<a href="updateCourse.html" class="add-btn">').text('Update')
+            
+            actionCell.append(updateBtn);
+            actionCell.append(deleteBtn);
+            updateBtn.click((function(courseName,CCH,CCLH,id) {
+              return function() {
+                
+                localStorage.setItem('CID', id);
+
+                localStorage.setItem('N', courseName);
+                localStorage.setItem('CCH', CCH);
+                localStorage.setItem('CCLH', CCLH);
+
+            };
+             })(courseName,CCH,CCLH,id));
+            deleteBtn.click(function() {
+              var courseId = $(this).attr('data-course-id');
+              console.log(courseId)
+            if (confirm("Are you sure you want to delete this course group?")) {
+                console.log(course.id)
+                $.ajax({
+                    url: 'http://localhost:8081//delete-courses',
+                    type: 'POST',
+                    contentType: "application/json",
+                    data: JSON.stringify({id:courseId}),
+                    success: function() {
+                        // Xóa hàng trong bảng
+                        alert("Success")
+                        window.location.href = "trangchu.html";
+                        $(this).parents('tr').remove();
+                    },
+                    error: function() {
+                        alert("Error deleting course group");
+                    }
+                });
+            }
+        });
             row.append(actionCell);
+            
             courseTable.append(row);
+            
           }
         }
       });
@@ -58,10 +87,24 @@
   localStorage.setItem('courseGroupData', courseCode);
 }
 
+
+
   </script>
 </head>
 <body>
+  <header>
+		<h1>Admin page</h1>
+	</header>
+	<nav>
+		<ul>
+			<li><a class="add-btn" href="trangchu2.html">Home page</a></li>
+			<li><a class="add-btn" href="trangchu.html">Timetable management</a></li>
+			<li><a class="add-btn" href="#">Student management</a></li>
+            <li><a class="add-btn" href="#">Teacher management</a></li>
+		</ul>
+	</nav>
   <h1>List of courses</h1>
+  <a href="addCourse.html" class="add-btn" id="add-new-button">Add New</a>
   <table id="course-table">
     <thead>
       <tr>
@@ -74,5 +117,6 @@
       <!-- Các dòng (rows) của bảng sẽ được thêm bởi JavaScript -->
     </tbody>
   </table>
+  
 </body>
 </html>

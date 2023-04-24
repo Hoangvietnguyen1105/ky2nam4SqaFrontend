@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/css/add.css">
+    <link rel="stylesheet" type="text/css" href="./css/updateCourseGroup.css">
+
+    
     <header>
       <h1>Admin page</h1>
     </header>
@@ -17,34 +19,41 @@
       </ul>
     </nav>
     <h1>Create cour group of course </h1>
-
-    
-    <a class="add-btn" href="/courseGroup.html">ComeBack</a>
+    <a class="add-btn" href="/trangchu.html">ComeBack</a>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <title>Document</title>
-   
+    
       <script>
-                var id = localStorage.getItem('CGID');
+                var id = localStorage.getItem('CID');
+                var CCH = localStorage.getItem('CCH');
+                var CCLH = localStorage.getItem('CCLH');
+                var N = localStorage.getItem('N')
 
             $(document).ready(function() {
+                $('#creditHour').val(CCH);
+                $('#classHour').val(CCLH);
+                $('#name').val(N);
             $('#edit-form').submit(function(event) {
                 // Ngăn chặn form gửi đi mặc định
+               
                 event.preventDefault();
-                                var weekInput = $('#week').val();
+                
                
                 // Lấy các giá trị trong form
-                var groupCode = $('#groupCode').val()
-                var labCode = $('#labCode').val()
-               console.log(groupCode)
+                var creditHour = $('#creditHour').val();
+                var classHour = $('#classHour').val()
+                var name = $('#name').val()
                 // Gửi các giá trị đến API
                 $.ajax({
-                url: 'http://localhost:8081/create-coursesGroup',
-                type: 'POST',
+                url: 'http://localhost:8081/update-courses',
+                type: 'PUT',
                 data: JSON.stringify({
-                    course_code:id,
-                    groupCode:groupCode,
-                    labCode:labCode
+                    id,
+                    creditHour,
+                    classHour,
+                    name
+                    
                  }),
                 contentType: "application/json",
 
@@ -52,7 +61,7 @@
                     // Xử lý dữ liệu trả về từ API
                     alert(data)
                         if(data === "Success"){
-                            window.location.href = "courseGroup.html";
+                            window.location.href = "trangchu.html";
 
                         }
 
@@ -69,18 +78,20 @@
     
 </head>
 <body>
-    <body>
+    
         <form id="edit-form">
             <div>
-              <label for="day">Group code:</label>
-              <input type="text" id="groupCode" name="groupCode" required pattern="[1-9]|[1-9][0-9]"">
+              <label for="classHour">Class hour:</label>
+              <input type="number" id="classHour" name="classHour" required max="150" min="10">
+              <label for="creditHour">Credit hour:</label>
+              <input type="number" id="creditHour" name="creditHour" required max="8" min="1">
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="name" required>
             </div>
-            
-           
             <button type="submit">Add</button>
           </form>
           
-    </body>
+    
     
 </body>
 </html>

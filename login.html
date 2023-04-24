@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" type="text/css" href="./css/login.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#form-i').submit(function(event) {
+                event.preventDefault(); // ngăn chặn hành động mặc định của form
+                
+                const username = $('#username').val();
+                const password = $('#password').val();
+                
+                const data = JSON.stringify({ username: username, password: password }); // chuyển đổi dữ liệu thành JSON
+                
+                $.ajax({
+                    url: 'http://localhost:8081/check-login',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: data,
+                    success: function(data) {
+                        alert(data);
+                        if(data === "Success"){
+                            window.location.href = "trangchu2.html";
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="form-i">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Log in</button>
+        </form>
+    </div>
+</body>
+</html>

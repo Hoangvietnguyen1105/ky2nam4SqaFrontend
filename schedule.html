@@ -2,143 +2,26 @@
 <html>
 <head>
 	<title>List of schedule</title>
-    <header>
-        <div class="logo">
-          
-          <h1>Timetable</h1>
-        </div>
-        <div class="menu">
-          <ul>
-            <li><a href="#">Timetable</a></li>
-            <li><a href="#">student</a></li>
-            <li><a href="#">teacher</a></li>
-          </ul>
-        </div>
-      </header>
+  <header>
+		<h1>Admin page</h1>
+	</header>
+	<nav>
+		<ul>
+			<li><a class="add-btn" href="trangchu2.html">Home page</a></li>
+			<li><a class="add-btn" href="trangchu.html">Timetable management</a></li>
+			<li><a class="add-btn" href="#">Student management</a></li>
+            <li><a class="add-btn" href="#">Teacher management</a></li>
+		</ul>
+	</nav>
     <h1>List of schedule</h1>
-    <a class="button-s" href="/trangchu.html">home</a>
-    <a class="button-s" href="/courseGroup.html">ComeBack</a>
-    <a class="button-s" href="/add.html">Add New</a>
+    <a class="add-btn" href="/courseGroup.html">ComeBack</a>
+    <a class="add-btn" href="/add.html">Add New</a>
+    <link rel="stylesheet" type="text/css" href="./css/schedule.css">
+
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<div id="schedule-list"></div>
-    <style>
-               header {
-  background-color: #867878;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  height: 70px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-}
-
-.logo h1 {
-  font-size: 24px;
-  margin: 0;
-  padding-left: 10px;
-}
-
-.menu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
-
-.menu li {
-  margin-left: 20px;
-}
-
-.menu a {
-  color: #333;
-  text-decoration: none;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-
-
-
-                    /* Định dạng bảng */
-            table {
-            border-collapse: collapse;
-            width: 100%;
-            }
-
-            /* Định dạng tiêu đề của bảng */
-            th {
-            background-color: #e85959;
-            color: white;
-            font-weight: bold;
-            padding: 8px;
-            text-align: center;
-            text-transform: uppercase;
-            }
-
-            /* Định dạng các ô dữ liệu trong bảng */
-            td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-            }
-
-            /* Định dạng nút */
-            button {
-            background-color: #d94444;
-            border: none;
-            color: white;
-            padding: 8px 16px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            margin: 4px 2px;
-            cursor: pointer;
-            }
-
-            /* Định dạng hover của nút */
-            button:hover {
-            background-color: #e9b6ec;
-            }
-
-            /* Định dạng dòng kẻ giữa các hàng */
-            tr:nth-child(even) {
-            background-color: #f2f2f2;
-            }
-            a {
-            color: rgb(196, 33, 33); /* màu chữ */
-            text-decoration: none; /* không gạch chân */
-            font-weight: bold; /* đậm chữ */
-            margin-left: 20px;
-            }
-
-            a:hover {
-            color: red; /* thay đổi màu chữ khi di chuột qua */
-            text-decoration: underline; /* gạch chân khi di chuột qua */
-            cursor: pointer; /* hiển thị con trỏ tay */
-            }
-
-            a:active {
-            color: green; /* thay đổi màu chữ khi nhấn chuột */
-            }
-                    a {
-            display: inline-block;
-            background-color: #e85959;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.2s;
-            margin-right: 20px;
-          }
-  
-  a:hover {
-    background-color: #ff8c66;
-  }
-        .button-s{
-          margin-bottom: 20px;
-        }
-        </style>
+    
+     
         
 <script>
 $(document).ready(function() {
@@ -180,14 +63,14 @@ $(document).ready(function() {
                 table.append(tr);
                 // Thêm sự kiện click vào nút Update
               // Tạo thẻ a
-                var updateLink = $('<a>').attr('href', 'update.html').text('Update');
+                var updateLink = $('<a class="add-btn">').attr('href', 'update.html').text('Update');
                 // Thêm sự kiện click vào thẻ a
                 updateLink.click(function() {
                     localStorage.setItem('scheduleId', schedule.id);
                 });
 
                 // Tạo thẻ a
-                var deleteLink = $('<a>').attr('href', '#').text('Delete');
+                var deleteLink = $('<a class="add-btn">').attr('href', '#').text('Delete');
 // Thêm sự kiện click vào thẻ a
                 deleteLink.click(function() {
                     var id = schedule.id;

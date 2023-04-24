@@ -16,7 +16,7 @@
               <li><a class="add-btn" href="#">Teacher management</a></li>
       </ul>
     </nav>
-    <h1>Create schedule of course group</h1>
+    <h1>Create course</h1>
 
    
     <a class="add-btn" href="/schedule.html">ComeBack</a>
@@ -31,30 +31,27 @@
             $('#edit-form').submit(function(event) {
                 // Ngăn chặn form gửi đi mặc định
                 event.preventDefault();
-                                var weekInput = $('#week').val();
-                if (!isValidWeekInput(weekInput)) {
-                    alert("Please enter week numbers between 1 and 20, separated by commas (,)");
-                    return;
-                }
+                                var nameInput = $('#name').val();
+                
                 // Lấy các giá trị trong form
-                var day = $('#day').val();
-                var start = $('#start').val();
-                var lessonTime = $('#lessonTime').val();
-                var room = $('#room').val();
-                var week = $('#week').val().split(",").map(Number);
-                console.log(week)
+                var classHour = $('#class_hour').val();
+                var courseCode = $('#course_code').val();
+                var creditHour = $('#credit_hour').val();
+                var faculty = $('#faculty').val();
+                var name = $('#name').val();
+                console.log(name)
                 // Gửi các giá trị đến API
                 $.ajax({
-                url: 'http://localhost:8081/create-schedule',
+                url: 'http://localhost:8081/create-courses',
                 type: 'POST',
                 data: JSON.stringify({
-                    coursesGroupId:id,
-                    day: day,
-                    start: start,
-                    lessonTime: lessonTime,
-                    room: room,
-                    week: week
+                    
+                    classHour: classHour,
+                    coursesCode: courseCode,
+                    creditHour: creditHour,
+                    name: name
                  }),
+
                 contentType: "application/json",
 
                 success: function(data) {
@@ -62,7 +59,7 @@
                     console.log(data)
                     alert(data);
                     if(data==="Success"){
-                        window.location.href = "schedule.html";
+                        window.location.href = "trangchu.html";
 
                        }
                 },
@@ -72,18 +69,14 @@
                 });
             });
             });
-            function isValidWeekInput(input) {
+            function isValidnameInput(input) {
             // kiểm tra định dạng
             if (!/^\d+(,\d+)*$/.test(input)) {
                 return false;
             }
             // tách các số và kiểm tra giá trị của từng số
-            var weekNumbers = input.split(",").map(Number);
-            for (var i = 0; i < weekNumbers.length; i++) {
-                if (weekNumbers[i] < 1 || weekNumbers[i] > 20) {
-                return false;
-                }
-            }
+            var nameNumbers = input.split(",").map(Number);
+           
             return true;
             }
     </script>
@@ -93,26 +86,26 @@
     <body>
         <form id="edit-form">
             <div>
-              <label for="day">Day:</label>
-              <input type="number" id="day" name="day" required max="7" min="2">
+              <label for="class_hour">Class hour:</label>
+              <input type="number" id="class_hour" name="class_hour" required min="20" max="150">
             </div>
             <div>
-              <label for="start">Start:</label>
-              <input type="number" id="start" name="start" required max="11" min="1">
+              <label for="course_code">Course code:</label>
+              <input type="text" id="course_code" name="course_code" required>
             </div>
             <div>
-              <label for="lessonTime">Lesson Time:</label>
-              <input type="number" id="lessonTime" name="lessonTime" required max="12" min="2">
+              <label for="credit_hour">Credit hour:</label>
+              <input type="number" id="credit_hour" name="credit_hour" required min="1" max="8">
             </div>
             <div>
-              <label for="room">Room:</label>
-              <input type="number" id="room" name="room" required min="101" max="150">
+              <label for="faculty">Facility :</label>
+              <input type="text" id="faculty" name="faculty" required >
             </div>
             <div>
-              <label for="week">Week:</label>
-              <input type="text" id="week" name="week" required>
+              <label for="name">name:</label>
+              <input type="text" id="name" name="name" required>
             </div>
-            <button class="add-btn" type="submit">Add</button>
+            <button class="add-btn"  type="submit">Add</button>
           </form>
           
     </body>
